@@ -985,6 +985,86 @@ body.weather-stormy-night { background: linear-gradient(135deg, #020617 0%, #1e2
   box-shadow: 0 0 15px var(--accent-glow);
 }
 
+/* Sun Track */
+.sun-track-container {
+  margin-top: 32px;
+  padding: 24px;
+  border-radius: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.sun-track-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.track-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-secondary);
+}
+
+.track-status {
+  font-size: 0.8rem;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 4px 10px;
+  border-radius: 20px;
+}
+
+.track-visual {
+  width: 100%;
+  max-width: 280px;
+  margin: 0 auto;
+}
+
+.track-svg {
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.sun-point {
+  filter: drop-shadow(0 0 8px var(--accent-glow));
+}
+
+.track-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sun-time {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sun-icon {
+  color: #f1c40f;
+}
+
+.time-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.time-info .label {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+.time-info .value {
+  font-size: 0.95rem;
+  font-weight: 800;
+}
+
 /* Loaders and Toasts */
 .loader-container {
   display: flex;

@@ -6,6 +6,7 @@ import './index.css';
 import Header from './components/Header';
 import RecentSearches from './components/RecentSearches';
 import WeatherAlerts from './components/WeatherAlerts';
+import SunTrack from './components/SunTrack';
 import CurrentWeather from './components/CurrentWeather';
 import HourlyForecast from './components/HourlyForecast';
 import ExtendedMetrics from './components/ExtendedMetrics';
@@ -188,6 +189,7 @@ function App() {
                   showTemp={showTemp} 
                 />
                 <ExtendedMetrics current={weatherData.current} />
+                <SunTrack current={weatherData.current} />
                 <WeatherChart hourly={weatherData.hourly} unit={unit} />
               </CurrentWeather>
             </div>
