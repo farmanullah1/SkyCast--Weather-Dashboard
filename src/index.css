@@ -350,39 +350,96 @@ body.weather-stormy-night { background: linear-gradient(135deg, #020617 0%, #1e3
   gap: 12px;
 }
 
+/* Weather Insights */
+.weather-insights {
+  margin-top: 32px;
+}
+
+.insights-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+.insight-card {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 20px 24px;
+  border-radius: 24px;
+}
+
+.insight-icon {
+  color: var(--accent-color);
+  background: rgba(129, 236, 236, 0.1);
+  padding: 10px;
+  border-radius: 16px;
+  box-sizing: content-box;
+}
+
+.insight-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.insight-label {
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.insight-value {
+  font-size: 1.1rem;
+  font-weight: 800;
+}
+
+.insight-card.warning .insight-icon {
+  color: #fab1a0;
+  background: rgba(250, 177, 160, 0.1);
+}
+
 /* Desktop Enhancements (768px+) */
 @media (min-width: 768px) {
   #root { padding: 32px; }
   .app-container { gap: 32px; }
-  
+
   .app-header {
     flex-direction: row;
     justify-content: space-between;
   }
-  
+
   .search-wrapper { max-width: 500px; }
-  
+
   .weather-details { grid-template-columns: repeat(3, 1fr); }
-  
-  .metrics-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
-  
+
+  .metrics-grid { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); }
+
+  .insights-grid { grid-template-columns: repeat(3, 1fr); }
+
   .pollutant-grid { grid-template-columns: 1fr 1fr; }
 }
 
-/* Wide Screen Enhancements (1024px+) */
-@media (min-width: 1024px) {
+/* Wide Screen Enhancements (1200px+) */
+@media (min-width: 1200px) {
   .main-grid {
-    grid-template-columns: 1.5fr 1fr;
-    gap: 32px;
+    grid-template-columns: 1.6fr 1fr;
+    gap: 40px;
   }
-  
-  .glass-card { padding: 32px; }
-  
-  .city-name { font-size: 3.5rem; }
-  .temperature { font-size: 7rem; }
+
+  .glass-card { padding: 40px; }
+
+  .city-name { font-size: 4rem; }
+  .temperature { font-size: 8rem; }
 }
 
-/* Alerts */
+/* Ultrawide Enhancements (1600px+) */
+@media (min-width: 1600px) {
+  #root { max-width: 1400px; }
+  .main-grid { grid-template-columns: 2fr 1fr; }
+}
+
+/* Loaders and Toasts */
 .alert-card {
   padding: 14px 18px;
   border-radius: 16px;

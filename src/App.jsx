@@ -10,6 +10,7 @@ import SunTrack from './components/SunTrack';
 import CurrentWeather from './components/CurrentWeather';
 import HourlyForecast from './components/HourlyForecast';
 import ExtendedMetrics from './components/ExtendedMetrics';
+import WeatherInsights from './components/WeatherInsights';
 import WeatherChart from './components/WeatherChart';
 import FiveDayForecast from './components/FiveDayForecast';
 import WeatherSkeleton from './components/WeatherSkeleton';
@@ -188,6 +189,7 @@ function App() {
                   hourly={weatherData.hourly} 
                   showTemp={showTemp} 
                 />
+                <WeatherInsights current={weatherData.current} />
                 <ExtendedMetrics current={weatherData.current} />
                 <SunTrack current={weatherData.current} />
                 <WeatherChart hourly={weatherData.hourly} unit={unit} />

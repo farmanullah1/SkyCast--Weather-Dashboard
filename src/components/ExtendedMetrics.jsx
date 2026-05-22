@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Sun, Sunrise, Sunset, Eye, Wind, Activity } from 'lucide-react';
+import { Sun, Sunrise, Sunset, Eye, Wind, Activity, Droplets } from 'lucide-react';
 import Modal from './Modal';
 
 const ExtendedMetrics = ({ current }) => {
@@ -43,6 +43,24 @@ const ExtendedMetrics = ({ current }) => {
       value: `${Math.round(current.windKph)} km/h`,
       icon: <Wind size={20} />,
       desc: 'Breeze'
+    },
+    {
+      label: 'Pressure',
+      value: `${current.pressureMb} mb`,
+      icon: <Activity size={20} />,
+      desc: 'Atmospheric'
+    },
+    {
+      label: 'Dew Point',
+      value: `${current.dewPointC}°C`,
+      icon: <Droplets size={20} />,
+      desc: 'Humidity'
+    },
+    {
+      label: 'Moon Phase',
+      value: current.moon_phase,
+      icon: <div className="moon-icon-placeholder" />, 
+      desc: `${current.moon_illumination}% Illum.`
     }
   ];
 
