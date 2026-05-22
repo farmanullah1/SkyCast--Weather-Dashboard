@@ -187,7 +187,6 @@ return (
     )}
 
     <Header 
-...
         query={query}
         setQuery={setQuery}
         handleSearch={handleSearch}
