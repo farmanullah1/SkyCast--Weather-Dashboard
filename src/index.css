@@ -842,6 +842,149 @@ body.weather-stormy-night { background: linear-gradient(135deg, #020617 0%, #1e2
   opacity: 0.6;
 }
 
+/* Modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  padding: 20px;
+}
+
+.modal-content {
+  width: 100%;
+  max-width: 500px;
+  padding: 32px !important;
+  position: relative;
+  border-top: 1px solid rgba(255, 255, 255, 0.4);
+  border-left: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.modal-title {
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+.modal-close {
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: white;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.modal-close:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: rotate(90deg);
+}
+
+.pollutant-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.pollutant-card {
+  padding: 16px;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.pollutant-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+}
+
+.pollutant-value {
+  font-size: 1.2rem;
+  font-weight: 800;
+}
+
+.pollutant-unit {
+  font-size: 0.75rem;
+  opacity: 0.6;
+  font-weight: 500;
+}
+
+.metric-card.clickable {
+  cursor: pointer;
+  border: 1px solid var(--accent-glow);
+}
+
+.metric-card.clickable:hover {
+  background: rgba(129, 236, 236, 0.1);
+  box-shadow: 0 0 20px var(--accent-glow);
+}
+
+.click-hint {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--accent-color);
+  margin-top: 8px;
+  letter-spacing: 0.5px;
+  opacity: 0.8;
+}
+
+.aqi-footer-note {
+  margin-top: 24px;
+  font-size: 0.8rem;
+  opacity: 0.5;
+  text-align: center;
+  font-weight: 500;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.action-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: white;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.action-btn:hover {
+  background: var(--accent-color);
+  color: #0f172a;
+  box-shadow: 0 0 15px var(--accent-glow);
+}
+
 /* Loaders and Toasts */
 .loader-container {
   display: flex;

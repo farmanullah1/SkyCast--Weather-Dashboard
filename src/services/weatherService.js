@@ -151,7 +151,15 @@ export const fetchFromWAPI = async (searchQuery, isCoords) => {
       sunrise: data.forecast.forecastday[0].astro.sunrise,
       sunset: data.forecast.forecastday[0].astro.sunset,
       uvIndex: data.current.uv,
-      aqi: Math.round(data.current.air_quality['us-epa-index'])
+      aqi: Math.round(data.current.air_quality['us-epa-index']),
+      pollutants: {
+        co: Math.round(data.current.air_quality.co),
+        no2: data.current.air_quality.no2.toFixed(1),
+        o3: data.current.air_quality.o3.toFixed(1),
+        so2: data.current.air_quality.so2.toFixed(1),
+        pm2_5: data.current.air_quality.pm2_5.toFixed(1),
+        pm10: data.current.air_quality.pm10.toFixed(1)
+      }
     },
     alerts: data.alerts?.alert?.map(alert => ({
       headline: alert.headline,

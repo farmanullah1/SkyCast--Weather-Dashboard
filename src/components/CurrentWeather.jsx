@@ -1,11 +1,30 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Thermometer, Droplets, Wind } from 'lucide-react';
+import { Thermometer, Droplets, Wind, Share2 } from 'lucide-react';
 
 const CurrentWeather = ({ weatherData, showTemp, apiSource, children }) => {
   const itemVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0 }
+  };
+
+  const handleShare = async () => {
+    const text = `Current weather in ${weatherData.location.name}: ${weatherData.current.desc}, ${showTemp(weatherData.current.tempC)}°. Check it out on SkyCast!`;
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: 'SkyCast Weather',
+          text: text,
+          url: window.location.href,
+        });
+      } catch (err) {
+        console.error('Share failed:', err);
+      }
+    } else {
+      // Fallback: Copy to clipboard
+      navigator.clipboard.writeText(`${text} ${window.location.href}`);
+      alert('Weather details copied to clipboard!');
+    }
   };
 
   return (
@@ -15,7 +34,18 @@ const CurrentWeather = ({ weatherData, showTemp, apiSource, children }) => {
           <h2 className="city-name">{weatherData.location.name}</h2>
           <p className="date-time">{weatherData.location.country} • {weatherData.location.localTimeFormatted}</p>
         </div>
-        <div className="api-badge">via {apiSource}</div>
+        <div className="header-actions">
+          <motion.button 
+            whileHover={{ scale: 1.1 }} 
+            whileTap={{ scale: 0.9 }} 
+            onClick={handleShare} 
+            className="action-btn"
+            title="Share Weather"
+          >
+            <Share2 size={18} />
+          </motion.button>
+          <div className="api-badge">via {apiSource}</div>
+        </div>
       </div>
 
       <div className="weather-main">
