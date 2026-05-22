@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Github, Linkedin, ExternalLink } from 'lucide-react';
+import { Github as GithubIcon, Linkedin as LinkedinIcon, ExternalLink } from 'lucide-react';
 
 const Footer = () => {
   return (
@@ -21,11 +21,11 @@ const Footer = () => {
             <span>Portfolio</span>
           </a>
           <a href="https://www.linkedin.com/in/farmanullah-ansari/" target="_blank" rel="noopener noreferrer" className="footer-link">
-            <Linkedin size={18} />
+            <LinkedinIcon size={18} />
             <span>LinkedIn</span>
           </a>
           <a href="https://github.com/farmanullah1" target="_blank" rel="noopener noreferrer" className="footer-link">
-            <Github size={18} />
+            <GithubIcon size={18} />
             <span>GitHub</span>
           </a>
         </div>
