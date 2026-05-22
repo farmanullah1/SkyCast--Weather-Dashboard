@@ -397,6 +397,36 @@ body.weather-stormy-night .bg-elements { background: radial-gradient(circle at 5
   transform: translateX(8px);
 }
 
+/* Atmosphere Particles */
+.atmosphere-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.particle {
+  position: absolute;
+  background: white;
+}
+
+.particle.rain {
+  background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.4));
+  width: 1px;
+}
+
+.particle.snow {
+  border-radius: 50%;
+  filter: blur(1px);
+}
+
+.particle.sparkle {
+  border-radius: 50%;
+  background: radial-gradient(circle, #fff 0%, transparent 70%);
+  filter: blur(2px);
+}
+
 /* Footer & Branding */
 .app-footer {
   margin-top: 80px;

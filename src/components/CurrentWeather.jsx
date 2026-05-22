@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Thermometer, Droplets, Wind, Share2, Pin, PinOff } from 'lucide-react';
+import Counter from './Counter';
 
 const CurrentWeather = ({ weatherData, showTemp, apiSource, isPinned, onTogglePin, children }) => {
   const itemVariants = {
@@ -68,7 +69,7 @@ const CurrentWeather = ({ weatherData, showTemp, apiSource, isPinned, onTogglePi
           <span className="weather-desc">{weatherData.current.desc}</span>
         </motion.div>
         <div className="temperature">
-          {showTemp(weatherData.current.tempC)}°
+          <Counter value={showTemp(weatherData.current.tempC)} />°
         </div>
       </div>
 
@@ -77,21 +78,21 @@ const CurrentWeather = ({ weatherData, showTemp, apiSource, isPinned, onTogglePi
           <Thermometer className="detail-icon" size={24} />
           <div className="detail-info">
             <span className="detail-label">Feels Like</span>
-            <span className="detail-value">{showTemp(weatherData.current.feelsLikeC)}°</span>
+            <span className="detail-value"><Counter value={showTemp(weatherData.current.feelsLikeC)} />°</span>
           </div>
         </motion.div>
         <motion.div whileHover={{ scale: 1.05 }} className="detail-item">
           <Droplets className="detail-icon" size={24} />
           <div className="detail-info">
             <span className="detail-label">Humidity</span>
-            <span className="detail-value">{weatherData.current.humidity}%</span>
+            <span className="detail-value"><Counter value={weatherData.current.humidity} />%</span>
           </div>
         </motion.div>
         <motion.div whileHover={{ scale: 1.05 }} className="detail-item">
           <Wind className="detail-icon" size={24} />
           <div className="detail-info">
             <span className="detail-label">Wind</span>
-            <span className="detail-value">{Math.round(weatherData.current.windKph)} km/h</span>
+            <span className="detail-value"><Counter value={Math.round(weatherData.current.windKph)} /> km/h</span>
           </div>
         </motion.div>
       </div>

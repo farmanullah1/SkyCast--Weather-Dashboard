@@ -7,6 +7,7 @@ import Header from './components/Header';
 import RecentSearches from './components/RecentSearches';
 import WeatherAlerts from './components/WeatherAlerts';
 import PinnedCities from './components/PinnedCities';
+import Atmosphere from './components/Atmosphere';
 import SunTrack from './components/SunTrack';
 import TiltCard from './components/TiltCard';
 import CurrentWeather from './components/CurrentWeather';
@@ -170,16 +171,23 @@ function App() {
       transition: { type: 'spring', stiffness: 100, damping: 20 }
     }
   };
+return (
+  <div className="app-container">
+    {/* Background Animated Elements */}
+    <div className="bg-elements">
+      <motion.div className="orb orb-1" animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }} transition={{ repeat: Infinity, duration: 8 }}/>
+      <motion.div className="orb orb-2" animate={{ scale: [1, 1.3, 1], opacity: [0.2, 0.4, 0.2] }} transition={{ repeat: Infinity, duration: 12 }}/>
+    </div>
 
-  return (
-    <div className="app-container">
-      {/* Background Animated Elements */}
-      <div className="bg-elements">
-        <motion.div className="orb orb-1" animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }} transition={{ repeat: Infinity, duration: 8 }}/>
-        <motion.div className="orb orb-2" animate={{ scale: [1, 1.3, 1], opacity: [0.2, 0.4, 0.2] }} transition={{ repeat: Infinity, duration: 12 }}/>
-      </div>
+    {weatherData && (
+      <Atmosphere 
+        condition={weatherData.current.conditionType} 
+        isDay={weatherData.current.isDay} 
+      />
+    )}
 
-      <Header 
+    <Header 
+...
         query={query}
         setQuery={setQuery}
         handleSearch={handleSearch}
