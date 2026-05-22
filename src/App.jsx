@@ -196,6 +196,7 @@ function App() {
       </AnimatePresence>
 
       <Toast message={error} onClose={() => setError(null)} />
+      <Footer />
     </div>
   );
 }
