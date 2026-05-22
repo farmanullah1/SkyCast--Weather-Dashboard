@@ -439,3 +439,62 @@ body.weather-stormy-night .bg-elements { background: radial-gradient(circle at 5
   font-weight: 800;
   box-shadow: 0 30px 60px rgba(0,0,0,0.4);
 }
+
+/* Weather Map */
+.weather-map-container {
+  margin-top: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.map-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.layer-selector {
+  display: flex;
+  gap: 8px;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 4px;
+  border-radius: 14px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.layer-btn {
+  padding: 6px 14px;
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-weight: 700;
+  font-size: 0.8rem;
+  cursor: pointer;
+  border-radius: 10px;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.layer-btn.active {
+  background: var(--accent-color);
+  color: #020617;
+  box-shadow: 0 0 15px var(--accent-glow);
+}
+
+.map-wrapper {
+  height: 400px;
+  width: 100%;
+  border-radius: 24px;
+  overflow: hidden;
+  position: relative;
+  z-index: 10;
+}
+
+.leaflet-container {
+  background: #0f172a !important;
+}
+

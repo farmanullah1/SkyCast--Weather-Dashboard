@@ -13,6 +13,7 @@ import HourlyForecast from './components/HourlyForecast';
 import ExtendedMetrics from './components/ExtendedMetrics';
 import WeatherInsights from './components/WeatherInsights';
 import WeatherChart from './components/WeatherChart';
+import WeatherMap from './components/WeatherMap';
 import FiveDayForecast from './components/FiveDayForecast';
 import WeatherSkeleton from './components/WeatherSkeleton';
 import Toast from './components/Toast';
@@ -210,6 +211,10 @@ function App() {
                     <WeatherChart hourly={weatherData.hourly} unit={unit} />
                   </CurrentWeather>
                 </TiltCard>
+              </motion.div>
+
+              <motion.div variants={itemVariants}>
+                <WeatherMap location={weatherData.location} />
               </motion.div>
             </div>
 

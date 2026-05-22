@@ -87,6 +87,8 @@ export const fetchFromOWM = async (searchQuery, isCoords) => {
     location: {
       name: current.name,
       country: current.sys.country,
+      lat: current.coord.lat,
+      lon: current.coord.lon,
       localTimeFormatted: new Date(current.dt * 1000).toLocaleString('en-US', options)
     },
     current: {
@@ -136,6 +138,8 @@ export const fetchFromWAPI = async (searchQuery, isCoords) => {
     location: {
       name: data.location.name,
       country: data.location.country,
+      lat: data.location.lat,
+      lon: data.location.lon,
       localTimeFormatted: new Date(data.location.localtime).toLocaleString('en-US', options)
     },
     current: {
