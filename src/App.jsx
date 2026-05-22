@@ -7,6 +7,7 @@ import Header from './components/Header';
 import RecentSearches from './components/RecentSearches';
 import WeatherAlerts from './components/WeatherAlerts';
 import SunTrack from './components/SunTrack';
+import TiltCard from './components/TiltCard';
 import CurrentWeather from './components/CurrentWeather';
 import HourlyForecast from './components/HourlyForecast';
 import ExtendedMetrics from './components/ExtendedMetrics';
@@ -133,11 +134,20 @@ function App() {
 
   // Animation variants
   const containerVariants = {
-    hidden: { opacity: 0, scale: 0.95 },
+    hidden: { opacity: 0 },
     visible: { 
       opacity: 1, 
+      transition: { staggerChildren: 0.15, delayChildren: 0.2 }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 30, scale: 0.95 },
+    visible: { 
+      opacity: 1, 
+      y: 0, 
       scale: 1,
-      transition: { duration: 0.5, staggerChildren: 0.1 }
+      transition: { type: 'spring', stiffness: 100, damping: 20 }
     }
   };
 
@@ -145,8 +155,8 @@ function App() {
     <div className="app-container">
       {/* Background Animated Elements */}
       <div className="bg-elements">
-        <motion.div className="orb orb-1" animate={{ x: [0, 50, 0], y: [0, -50, 0] }} transition={{ repeat: Infinity, duration: 10, ease: "linear" }}/>
-        <motion.div className="orb orb-2" animate={{ x: [0, -50, 0], y: [0, 50, 0] }} transition={{ repeat: Infinity, duration: 15, ease: "linear" }}/>
+        <motion.div className="orb orb-1" animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }} transition={{ repeat: Infinity, duration: 8 }}/>
+        <motion.div className="orb orb-2" animate={{ scale: [1, 1.3, 1], opacity: [0.2, 0.4, 0.2] }} transition={{ repeat: Infinity, duration: 12 }}/>
       </div>
 
       <Header 
@@ -179,27 +189,38 @@ function App() {
             className="main-grid"
           >
             <div className="main-section">
-              <WeatherAlerts alerts={weatherData.alerts} />
-              <CurrentWeather 
-                weatherData={weatherData} 
-                showTemp={showTemp} 
-                apiSource={apiSource} 
-              >
-                <HourlyForecast 
-                  hourly={weatherData.hourly} 
-                  showTemp={showTemp} 
-                />
-                <WeatherInsights current={weatherData.current} />
-                <ExtendedMetrics current={weatherData.current} />
-                <SunTrack current={weatherData.current} />
-                <WeatherChart hourly={weatherData.hourly} unit={unit} />
-              </CurrentWeather>
+              <motion.div variants={itemVariants}>
+                <WeatherAlerts alerts={weatherData.alerts} />
+              </motion.div>
+              
+              <motion.div variants={itemVariants}>
+                <TiltCard>
+                  <CurrentWeather 
+                    weatherData={weatherData} 
+                    showTemp={showTemp} 
+                    apiSource={apiSource} 
+                  >
+                    <HourlyForecast 
+                      hourly={weatherData.hourly} 
+                      showTemp={showTemp} 
+                    />
+                    <WeatherInsights current={weatherData.current} />
+                    <ExtendedMetrics current={weatherData.current} />
+                    <SunTrack current={weatherData.current} />
+                    <WeatherChart hourly={weatherData.hourly} unit={unit} />
+                  </CurrentWeather>
+                </TiltCard>
+              </motion.div>
             </div>
 
-            <FiveDayForecast 
-              forecast={weatherData.forecast} 
-              showTemp={showTemp} 
-            />
+            <motion.div variants={itemVariants}>
+              <TiltCard>
+                <FiveDayForecast 
+                  forecast={weatherData.forecast} 
+                  showTemp={showTemp} 
+                />
+              </TiltCard>
+            </motion.div>
           </motion.main>
         ) : null}
       </AnimatePresence>
