@@ -5,6 +5,7 @@ import './index.css';
 // Components
 import Header from './components/Header';
 import RecentSearches from './components/RecentSearches';
+import WeatherAlerts from './components/WeatherAlerts';
 import CurrentWeather from './components/CurrentWeather';
 import HourlyForecast from './components/HourlyForecast';
 import ExtendedMetrics from './components/ExtendedMetrics';
@@ -154,6 +155,7 @@ function App() {
         loading={loading}
         unit={unit}
         handleUnitToggle={handleUnitToggle}
+        fetchWeather={fetchWeather}
       />
 
       <RecentSearches 
@@ -174,18 +176,21 @@ function App() {
             animate="visible"
             className="main-grid"
           >
-            <CurrentWeather 
-              weatherData={weatherData} 
-              showTemp={showTemp} 
-              apiSource={apiSource} 
-            >
-              <HourlyForecast 
-                hourly={weatherData.hourly} 
+            <div className="main-section">
+              <WeatherAlerts alerts={weatherData.alerts} />
+              <CurrentWeather 
+                weatherData={weatherData} 
                 showTemp={showTemp} 
-              />
-              <ExtendedMetrics current={weatherData.current} />
-              <WeatherChart hourly={weatherData.hourly} unit={unit} />
-            </CurrentWeather>
+                apiSource={apiSource} 
+              >
+                <HourlyForecast 
+                  hourly={weatherData.hourly} 
+                  showTemp={showTemp} 
+                />
+                <ExtendedMetrics current={weatherData.current} />
+                <WeatherChart hourly={weatherData.hourly} unit={unit} />
+              </CurrentWeather>
+            </div>
 
             <FiveDayForecast 
               forecast={weatherData.forecast} 

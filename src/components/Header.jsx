@@ -1,8 +1,45 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { Search, MapPin, CloudRain } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Search, MapPin, CloudRain, MapPinIcon } from 'lucide-react';
+import { fetchCitySuggestions } from '../services/weatherService';
 
-const Header = ({ query, setQuery, handleSearch, handleGeolocation, loading, unit, handleUnitToggle }) => {
+const Header = ({ query, setQuery, handleSearch, handleGeolocation, loading, unit, handleUnitToggle, fetchWeather }) => {
+  const [suggestions, setSuggestions] = useState([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const dropdownRef = useRef(null);
+
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(async () => {
+      if (query.length >= 3) {
+        const results = await fetchCitySuggestions(query);
+        setSuggestions(results);
+        setShowSuggestions(true);
+      } else {
+        setSuggestions([]);
+        setShowSuggestions(false);
+      }
+    }, 400);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [query]);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShowSuggestions(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const onSelectCity = (city) => {
+    const cityStr = `${city.name}${city.state ? `, ${city.state}` : ''}, ${city.country}`;
+    setQuery(cityStr);
+    setShowSuggestions(false);
+    fetchWeather(cityStr);
+  };
+
   return (
     <motion.header 
       className="app-header glass-card"
@@ -17,25 +54,49 @@ const Header = ({ query, setQuery, handleSearch, handleGeolocation, loading, uni
         <span>SkyCast</span>
       </div>
 
-      <form onSubmit={handleSearch} className="search-container">
-        <div className="search-input-wrapper">
-          <Search className="search-icon" size={20} />
-          <input
-            type="text"
-            placeholder="Search for a city..."
-            className="search-input"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            disabled={loading}
-          />
-        </div>
-        <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} type="submit" className="icon-btn" disabled={loading || !query.trim()}>
-          <Search size={20} />
-        </motion.button>
-        <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} type="button" className="icon-btn" onClick={handleGeolocation} disabled={loading} title="Use My Location">
-          <MapPin size={20} />
-        </motion.button>
-      </form>
+      <div className="search-wrapper" ref={dropdownRef}>
+        <form onSubmit={handleSearch} className="search-container">
+          <div className="search-input-wrapper">
+            <Search className="search-icon" size={20} />
+            <input
+              type="text"
+              placeholder="Search for a city..."
+              className="search-input"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              onFocus={() => query.length >= 3 && setShowSuggestions(true)}
+              disabled={loading}
+            />
+          </div>
+          <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} type="submit" className="icon-btn" disabled={loading || !query.trim()}>
+            <Search size={20} />
+          </motion.button>
+          <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} type="button" className="icon-btn" onClick={handleGeolocation} disabled={loading} title="Use My Location">
+            <MapPin size={20} />
+          </motion.button>
+        </form>
+
+        <AnimatePresence>
+          {showSuggestions && suggestions.length > 0 && (
+            <motion.ul 
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              className="suggestions-dropdown glass-morphism"
+            >
+              {suggestions.map((city, idx) => (
+                <li key={idx} onClick={() => onSelectCity(city)} className="suggestion-item">
+                  <MapPinIcon size={16} className="item-icon" />
+                  <div className="item-text">
+                    <span className="city-name-small">{city.name}</span>
+                    <span className="city-region">{city.state ? `${city.state}, ` : ''}{city.country}</span>
+                  </div>
+                </li>
+              ))}
+            </motion.ul>
+          )}
+        </AnimatePresence>
+      </div>
 
       <div className="unit-toggle">
         <button className={`unit-btn ${unit === 'c' ? 'active' : ''}`} onClick={() => handleUnitToggle('c')}>°C</button>

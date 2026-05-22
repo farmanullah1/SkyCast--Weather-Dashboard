@@ -20,6 +20,27 @@ export const mapWAPICondition = (code) => {
   return 'cloudy';
 };
 
+// Fetch City Suggestions (Autocomplete)
+export const fetchCitySuggestions = async (query) => {
+  if (!query || query.length < 3) return [];
+  const url = `https://api.openweathermap.org/geo/1.0/direct?q=${query}&limit=5&appid=${OWM_API_KEY}`;
+  try {
+    const res = await fetch(url);
+    if (!res.ok) return [];
+    const data = await res.json();
+    return data.map(item => ({
+      name: item.name,
+      state: item.state,
+      country: item.country,
+      lat: item.lat,
+      lon: item.lon
+    }));
+  } catch (err) {
+    console.error("Autocomplete error:", err);
+    return [];
+  }
+};
+
 // Fetch OpenWeatherMap
 export const fetchFromOWM = async (searchQuery, isCoords) => {
   let currentUrl = '';
@@ -100,7 +121,7 @@ export const fetchFromOWM = async (searchQuery, isCoords) => {
 // Fetch WeatherAPI (Fallback)
 export const fetchFromWAPI = async (searchQuery, isCoords) => {
   const q = searchQuery;
-  const url = `https://api.weatherapi.com/v1/forecast.json?key=${WAPI_KEY}&q=${q}&days=5&aqi=yes&alerts=no`;
+  const url = `https://api.weatherapi.com/v1/forecast.json?key=${WAPI_KEY}&q=${q}&days=5&aqi=yes&alerts=yes`;
   
   const res = await fetch(url);
   if (!res.ok) {
@@ -132,6 +153,13 @@ export const fetchFromWAPI = async (searchQuery, isCoords) => {
       uvIndex: data.current.uv,
       aqi: Math.round(data.current.air_quality['us-epa-index'])
     },
+    alerts: data.alerts?.alert?.map(alert => ({
+      headline: alert.headline,
+      desc: alert.desc,
+      severity: alert.severity,
+      urgency: alert.urgency,
+      areas: alert.areas
+    })) || [],
     forecast: data.forecast.forecastday.map((d, i) => ({
       dateFormatted: i === 0 ? 'Today' : new Date(d.date).toLocaleDateString('en-US', { weekday: 'long' }),
       minC: d.day.mintemp_c,
