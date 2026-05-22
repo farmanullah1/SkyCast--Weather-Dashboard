@@ -440,6 +440,119 @@ body.weather-stormy-night .bg-elements { background: radial-gradient(circle at 5
   box-shadow: 0 30px 60px rgba(0,0,0,0.4);
 }
 
+/* Pinned Cities */
+.pinned-cities-section {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.pin-icon-fixed {
+  color: var(--accent-color);
+}
+
+.pinned-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 12px;
+}
+
+.pinned-card {
+  padding: 16px;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.pinned-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.pinned-name {
+  font-size: 0.95rem;
+  font-weight: 800;
+  letter-spacing: -0.3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 80%;
+}
+
+.unpin-btn {
+  background: rgba(255, 118, 117, 0.1);
+  border: none;
+  color: #ff7675;
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  opacity: 0.6;
+}
+
+.unpin-btn:hover {
+  background: #ff7675;
+  color: white;
+  opacity: 1;
+}
+
+.pinned-main {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pinned-temp {
+  font-size: 1.4rem;
+  font-weight: 900;
+  letter-spacing: -1px;
+}
+
+.pinned-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.pinned-desc {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: capitalize;
+}
+
+.pinned-stats {
+  display: flex;
+  gap: 10px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  opacity: 0.7;
+}
+
+.p-stat {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.pinned-loading {
+  font-size: 0.8rem;
+  font-weight: 600;
+  opacity: 0.5;
+  text-align: center;
+  padding: 10px 0;
+}
+
 /* Weather Map */
 .weather-map-container {
   margin-top: 40px;
@@ -492,6 +605,13 @@ body.weather-stormy-night .bg-elements { background: radial-gradient(circle at 5
   overflow: hidden;
   position: relative;
   z-index: 10;
+}
+
+.action-btn.active-pin {
+  background: var(--accent-color);
+  color: #020617;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 15px var(--accent-glow);
 }
 
 .leaflet-container {

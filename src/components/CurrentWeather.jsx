@@ -1,8 +1,8 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Thermometer, Droplets, Wind, Share2 } from 'lucide-react';
+import { Thermometer, Droplets, Wind, Share2, Pin, PinOff } from 'lucide-react';
 
-const CurrentWeather = ({ weatherData, showTemp, apiSource, children }) => {
+const CurrentWeather = ({ weatherData, showTemp, apiSource, isPinned, onTogglePin, children }) => {
   const itemVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0 }
@@ -35,6 +35,15 @@ const CurrentWeather = ({ weatherData, showTemp, apiSource, children }) => {
           <p className="date-time">{weatherData.location.country} • {weatherData.location.localTimeFormatted}</p>
         </div>
         <div className="header-actions">
+          <motion.button 
+            whileHover={{ scale: 1.1 }} 
+            whileTap={{ scale: 0.9 }} 
+            onClick={() => onTogglePin(weatherData.location.name)} 
+            className={`action-btn ${isPinned ? 'active-pin' : ''}`}
+            title={isPinned ? "Unpin City" : "Pin City"}
+          >
+            {isPinned ? <PinOff size={18} /> : <Pin size={18} />}
+          </motion.button>
           <motion.button 
             whileHover={{ scale: 1.1 }} 
             whileTap={{ scale: 0.9 }} 

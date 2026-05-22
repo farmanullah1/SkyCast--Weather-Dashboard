@@ -6,6 +6,7 @@ import './index.css';
 import Header from './components/Header';
 import RecentSearches from './components/RecentSearches';
 import WeatherAlerts from './components/WeatherAlerts';
+import PinnedCities from './components/PinnedCities';
 import SunTrack from './components/SunTrack';
 import TiltCard from './components/TiltCard';
 import CurrentWeather from './components/CurrentWeather';
@@ -33,6 +34,24 @@ function App() {
     return saved ? JSON.parse(saved) : [];
   });
   const [apiSource, setApiSource] = useState('');
+  const [pinnedCities, setPinnedCities] = useState(() => {
+    const saved = localStorage.getItem('pinned-cities');
+    return saved ? JSON.parse(saved) : [];
+  });
+
+  const togglePinCity = (cityName) => {
+    setPinnedCities((prev) => {
+      let updated;
+      const exists = prev.some(c => c.toLowerCase() === cityName.toLowerCase());
+      if (exists) {
+        updated = prev.filter(c => c.toLowerCase() !== cityName.toLowerCase());
+      } else {
+        updated = [...prev, cityName];
+      }
+      localStorage.setItem('pinned-cities', JSON.stringify(updated));
+      return updated;
+    });
+  };
 
   const addToRecentSearches = (cityName) => {
     setRecentSearches((prev) => {
@@ -178,6 +197,13 @@ function App() {
         onClear={handleClearRecent}
       />
 
+      <PinnedCities 
+        pinnedCities={pinnedCities}
+        onRemove={togglePinCity}
+        onSelect={(city) => fetchWeather(city)}
+        unit={unit}
+      />
+
       <AnimatePresence mode="wait">
         {loading ? (
           <WeatherSkeleton key="skeleton" />
@@ -200,6 +226,8 @@ function App() {
                     weatherData={weatherData} 
                     showTemp={showTemp} 
                     apiSource={apiSource} 
+                    isPinned={pinnedCities.some(c => c.toLowerCase() === weatherData.location.name.toLowerCase())}
+                    onTogglePin={togglePinCity}
                   >
                     <HourlyForecast 
                       hourly={weatherData.hourly} 
