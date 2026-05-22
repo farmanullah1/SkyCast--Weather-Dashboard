@@ -12,6 +12,7 @@ import WeatherChart from './components/WeatherChart';
 import FiveDayForecast from './components/FiveDayForecast';
 import WeatherSkeleton from './components/WeatherSkeleton';
 import Toast from './components/Toast';
+import Footer from './components/Footer';
 
 // Services
 import { fetchFromOWM, fetchFromWAPI } from './services/weatherService';
