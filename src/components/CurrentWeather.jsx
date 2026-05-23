@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { Thermometer, Droplets, Wind, Share2, Pin, PinOff } from 'lucide-react';
 import Counter from './Counter';
 
-const CurrentWeather = ({ weatherData, showTemp, apiSource, isPinned, onTogglePin, children }) => {
+const CurrentWeather = ({ weatherData, showTemp, apiSource, isPinned, onTogglePin }) => {
   const itemVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0 }
@@ -29,7 +29,7 @@ const CurrentWeather = ({ weatherData, showTemp, apiSource, isPinned, onTogglePi
   };
 
   return (
-    <motion.section variants={itemVariants} className="current-weather glass-card highlight-card" style={{ transformStyle: "preserve-3d" }}>
+    <motion.section variants={itemVariants} className="current-weather glass-card highlight-card h-full" style={{ transformStyle: "preserve-3d" }}>
       <div className="location-info" style={{ transform: "translateZ(40px)" }}>
         <div>
           <h2 className="city-name">{weatherData.location.name}</h2>
@@ -95,10 +95,6 @@ const CurrentWeather = ({ weatherData, showTemp, apiSource, isPinned, onTogglePi
             <span className="detail-value"><Counter value={Math.round(weatherData.current.windKph)} /> km/h</span>
           </div>
         </motion.div>
-      </div>
-      
-      <div style={{ transform: "translateZ(30px)" }}>
-        {children}
       </div>
     </motion.section>
   );
