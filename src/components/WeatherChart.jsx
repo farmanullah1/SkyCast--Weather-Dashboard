@@ -4,14 +4,14 @@ import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 const WeatherChart = ({ hourly, unit }) => {
   const data = hourly.map(h => ({
     time: h.hourFormatted,
-    temp: h.tempC, // We'll convert this in the label if needed, or pass pre-converted
+    temp: unit === 'f' ? Math.round((h.tempC * 9/5) + 32) : Math.round(h.tempC),
   }));
 
   const CustomTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
       return (
-        <div className="custom-tooltip glass-morphism">
-          <p className="label">{`${label} : ${Math.round(payload[0].value)}°${unit.toUpperCase()}`}</p>
+        <div className="custom-tooltip glass-morphism" style={{ padding: '8px 12px', borderRadius: '12px' }}>
+          <p className="label" style={{ margin: 0, fontWeight: 700 }}>{`${label} : ${payload[0].value}°${unit.toUpperCase()}`}</p>
         </div>
       );
     }

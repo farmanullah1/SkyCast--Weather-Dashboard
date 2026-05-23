@@ -23,6 +23,7 @@ import WeatherSkeleton from './components/WeatherSkeleton';
 import Toast from './components/Toast';
 import Footer from './components/Footer';
 import Settings from './components/Settings';
+import CompareCities from './components/CompareCities';
 
 // Services
 import { fetchFromOWM, fetchFromWAPI } from './services/weatherService';
@@ -52,6 +53,23 @@ function App() {
     };
   });
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [isCompareOpen, setIsCompareOpen] = useState(false);
+  const [activeTheme, setActiveTheme] = useState(() => localStorage.getItem('app-theme') || 'cyan');
+
+  const themeColors = {
+    cyan: { color: '#81ecec', glow: 'rgba(129, 236, 236, 0.3)' },
+    amber: { color: '#fd9644', glow: 'rgba(253, 150, 100, 0.3)' },
+    emerald: { color: '#2ecc71', glow: 'rgba(46, 204, 113, 0.3)' },
+    lavender: { color: '#a855f7', glow: 'rgba(168, 85, 247, 0.3)' },
+    crimson: { color: '#ff7675', glow: 'rgba(255, 118, 117, 0.3)' }
+  };
+
+  useEffect(() => {
+    const selected = themeColors[activeTheme] || themeColors.cyan;
+    document.documentElement.style.setProperty('--accent-color', selected.color);
+    document.documentElement.style.setProperty('--accent-glow', selected.glow);
+    localStorage.setItem('app-theme', activeTheme);
+  }, [activeTheme]);
 
   const updateSetting = (key, value) => {
     setSettings(prev => {
@@ -242,6 +260,7 @@ function App() {
         query={query} setQuery={setQuery} handleSearch={handleSearch} handleGeolocation={handleGeolocation} 
         loading={loading} unit={unit} handleUnitToggle={handleUnitToggle} fetchWeather={fetchWeather}
         onOpenSettings={() => setIsSettingsOpen(true)}
+        onOpenCompare={() => setIsCompareOpen(true)}
       />
 
       <RecentSearches 
@@ -320,6 +339,15 @@ function App() {
       <Settings 
         isOpen={isSettingsOpen} onClose={() => setIsSettingsOpen(false)} 
         settings={settings} updateSetting={updateSetting} onExport={handleExport}
+        activeTheme={activeTheme} onSelectTheme={setActiveTheme}
+      />
+
+      <CompareCities
+        isOpen={isCompareOpen}
+        onClose={() => setIsCompareOpen(false)}
+        currentCity={weatherData?.location?.name}
+        currentData={weatherData}
+        unit={unit}
       />
 
       <Toast message={error} onClose={() => setError(null)} />

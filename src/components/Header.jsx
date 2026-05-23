@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, MapPin, CloudRain, MapPinIcon, Settings as SettingsIcon } from 'lucide-react';
+import { Search, MapPin, CloudRain, MapPinIcon, Settings as SettingsIcon, ArrowLeftRight } from 'lucide-react';
 import { fetchCitySuggestions } from '../services/weatherService';
 import VoiceSearch from './VoiceSearch';
 
-const Header = ({ query, setQuery, handleSearch, handleGeolocation, loading, unit, handleUnitToggle, fetchWeather, onOpenSettings }) => {
+const Header = ({ query, setQuery, handleSearch, handleGeolocation, loading, unit, handleUnitToggle, fetchWeather, onOpenSettings, onOpenCompare }) => {
   const [suggestions, setSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const dropdownRef = useRef(null);
@@ -67,12 +67,16 @@ const Header = ({ query, setQuery, handleSearch, handleGeolocation, loading, uni
               onChange={(e) => setQuery(e.target.value)}
               onFocus={() => query.length >= 3 && setShowSuggestions(true)}
               disabled={loading}
+              aria-label="Search for a city"
+              aria-autocomplete="list"
+              aria-controls="suggestions-list"
+              aria-expanded={showSuggestions}
             />
           </div>
-          <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} type="submit" className="icon-btn" disabled={loading || !query.trim()}>
+          <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} type="submit" className="icon-btn" disabled={loading || !query.trim()} aria-label="Submit search">
             <Search size={20} />
           </motion.button>
-          <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} type="button" className="icon-btn" onClick={handleGeolocation} disabled={loading} title="Use My Location">
+          <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} type="button" className="icon-btn" onClick={handleGeolocation} disabled={loading} title="Use My Location" aria-label="Use my current location">
             <MapPin size={20} />
           </motion.button>
           <VoiceSearch onResult={(res) => { setQuery(res); fetchWeather(res); }} disabled={loading} />
@@ -81,13 +85,15 @@ const Header = ({ query, setQuery, handleSearch, handleGeolocation, loading, uni
         <AnimatePresence>
           {showSuggestions && suggestions.length > 0 && (
             <motion.ul 
+              id="suggestions-list"
+              role="listbox"
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               className="suggestions-dropdown glass-morphism"
             >
               {suggestions.map((city, idx) => (
-                <li key={idx} onClick={() => onSelectCity(city)} className="suggestion-item">
+                <li key={idx} role="option" onClick={() => onSelectCity(city)} className="suggestion-item">
                   <MapPinIcon size={16} className="item-icon" />
                   <div className="item-text">
                     <span className="city-name-small">{city.name}</span>
@@ -101,6 +107,17 @@ const Header = ({ query, setQuery, handleSearch, handleGeolocation, loading, uni
       </div>
 
       <div className="header-right">
+        <motion.button
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          className="icon-btn compare-btn"
+          onClick={onOpenCompare}
+          title="Compare Cities"
+          style={{ marginRight: '4px' }}
+        >
+          <ArrowLeftRight size={20} />
+        </motion.button>
+
         <div className="unit-toggle">
           <button className={`unit-btn ${unit === 'c' ? 'active' : ''}`} onClick={() => handleUnitToggle('c')}>°C</button>
           <button className={`unit-btn ${unit === 'f' ? 'active' : ''}`} onClick={() => handleUnitToggle('f')}>°F</button>

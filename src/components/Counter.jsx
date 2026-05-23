@@ -1,16 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { animate } from 'framer-motion';
 
-const Counter = ({ value, duration = 1 }) => {
-  const [displayValue, setDisplayValue] = useState(0);
+const Counter = ({ value, duration = 0.8 }) => {
+  const [displayValue, setDisplayValue] = useState(value);
+  const prevValueRef = useRef(value);
 
   useEffect(() => {
-    const controls = animate(0, value, {
+    const from = prevValueRef.current;
+    const controls = animate(from, value, {
       duration: duration,
       onUpdate: (latest) => setDisplayValue(Math.round(latest)),
       ease: "easeOut"
     });
 
+    prevValueRef.current = value;
     return () => controls.stop();
   }, [value, duration]);
 

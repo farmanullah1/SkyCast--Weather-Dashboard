@@ -6,6 +6,13 @@ import Modal from './Modal';
 const ExtendedMetrics = ({ current }) => {
   const [isAQIModalOpen, setIsAQIModalOpen] = useState(false);
 
+  const getCardinalDirection = (deg) => {
+    if (deg === undefined || deg === null) return 'N/A';
+    const val = Math.floor((deg / 22.5) + 0.5);
+    const arr = ["N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW"];
+    return arr[(val % 16)];
+  };
+
   const metrics = [
     {
       label: 'UV Index',
@@ -41,8 +48,15 @@ const ExtendedMetrics = ({ current }) => {
     {
       label: 'Wind Speed',
       value: `${Math.round(current.windKph)} km/h`,
-      icon: <Wind size={20} />,
-      desc: 'Breeze'
+      icon: (
+        <div className="wind-compass-dial" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '24px', height: '24px', borderRadius: '50%', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)' }}>
+          <svg viewBox="0 0 24 24" width="16" height="16" style={{ transform: `rotate(${current.windDegree || 0}deg)`, transition: 'transform 1s cubic-bezier(0.25, 0.8, 0.25, 1)' }}>
+            <polygon points="12,3 15,10 12,8 9,10" fill="var(--accent-color)" />
+            <polygon points="12,21 15,14 12,16 9,14" fill="rgba(255,255,255,0.3)" />
+          </svg>
+        </div>
+      ),
+      desc: `Dir: ${getCardinalDirection(current.windDegree)} (${current.windDegree || 0}°)`
     },
     {
       label: 'Pressure',
