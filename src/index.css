@@ -552,6 +552,31 @@ input:checked + .slider:before { transform: translateX(22px); }
 .slider.round { border-radius: 34px; }
 .slider.round:before { border-radius: 50%; }
 
+/* Splash Screen */
+.splash-screen {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: #020617;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 5000;
+}
+
+.splash-logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.splash-title {
+  font-size: 3rem;
+  font-weight: 900;
+  letter-spacing: -2px;
+  color: white;
+}
+
 /* Footer & Branding */
 .app-footer {
   margin-top: 80px;

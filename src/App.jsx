@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { CloudRain } from 'lucide-react';
 import './index.css';
 import html2canvas from 'html2canvas';
 
@@ -31,6 +32,7 @@ function App() {
   const [weatherData, setWeatherData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
   const [unit, setUnit] = useState(() => localStorage.getItem('weather-unit') || 'c');
   const [recentSearches, setRecentSearches] = useState(() => {
     const saved = localStorage.getItem('recent-searches');
@@ -136,6 +138,7 @@ function App() {
         updateBackground(normalizedData.current.conditionType, normalizedData.current.isDay);
         if (!isCoords) addToRecentSearches(normalizedData.location.name);
         setLoading(false);
+        setIsInitialLoad(false);
         return;
       } catch (owmErr) {
         console.warn("OpenWeatherMap failed, falling back to WeatherAPI...", owmErr);
@@ -147,6 +150,7 @@ function App() {
       setApiSource('WeatherAPI');
       updateBackground(normalizedData.current.conditionType, normalizedData.current.isDay);
       if (!isCoords) addToRecentSearches(normalizedData.location.name);
+      setIsInitialLoad(false);
 
     } catch (err) {
       setError(err.message === 'City not found' ? err.message : 'Unable to fetch weather from both APIs. Please check your keys or connection.');
@@ -220,10 +224,36 @@ function App() {
   return (
     <div className="app-container" id={isSettingsOpen ? "" : "capture-area"}>
       {/* Background Animated Elements */}
-      <div className="bg-elements">
+      <motion.div 
+        className="bg-elements"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 2 }}
+      >
         <motion.div className="orb orb-1" animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }} transition={{ repeat: Infinity, duration: 8 }}/>
         <motion.div className="orb orb-2" animate={{ scale: [1, 1.3, 1], opacity: [0.2, 0.4, 0.2] }} transition={{ repeat: Infinity, duration: 12 }}/>
-      </div>
+      </motion.div>
+
+      <AnimatePresence>
+        {isInitialLoad && loading ? (
+          <motion.div 
+            key="splash"
+            className="splash-screen"
+            initial={{ opacity: 1 }}
+            exit={{ opacity: 0, scale: 1.1 }}
+            transition={{ duration: 0.8 }}
+          >
+             <motion.div 
+              animate={{ scale: [1, 1.1, 1], opacity: [0.5, 1, 0.5] }}
+              transition={{ repeat: Infinity, duration: 2 }}
+              className="splash-logo"
+             >
+               <CloudRain size={80} color="var(--accent-color)" />
+               <h1 className="splash-title">SkyCast</h1>
+             </motion.div>
+          </motion.div>
+        ) : null}
+      </AnimatePresence>
 
       {weatherData && settings.atmosphereEnabled && (
         <Atmosphere 

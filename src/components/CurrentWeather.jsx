@@ -29,8 +29,8 @@ const CurrentWeather = ({ weatherData, showTemp, apiSource, isPinned, onTogglePi
   };
 
   return (
-    <motion.section variants={itemVariants} className="current-weather glass-card highlight-card">
-      <div className="location-info">
+    <motion.section variants={itemVariants} className="current-weather glass-card highlight-card" style={{ transformStyle: "preserve-3d" }}>
+      <div className="location-info" style={{ transform: "translateZ(40px)" }}>
         <div>
           <h2 className="city-name">{weatherData.location.name}</h2>
           <p className="date-time">{weatherData.location.country} • {weatherData.location.localTimeFormatted}</p>
@@ -58,7 +58,7 @@ const CurrentWeather = ({ weatherData, showTemp, apiSource, isPinned, onTogglePi
         </div>
       </div>
 
-      <div className="weather-main">
+      <div className="weather-main" style={{ transform: "translateZ(80px)" }}>
         <motion.div 
           className="weather-condition"
           initial={{ scale: 0.8 }}
@@ -73,7 +73,7 @@ const CurrentWeather = ({ weatherData, showTemp, apiSource, isPinned, onTogglePi
         </div>
       </div>
 
-      <div className="weather-details">
+      <div className="weather-details" style={{ transform: "translateZ(50px)" }}>
         <motion.div whileHover={{ scale: 1.05 }} className="detail-item">
           <Thermometer className="detail-icon" size={24} />
           <div className="detail-info">
@@ -97,7 +97,9 @@ const CurrentWeather = ({ weatherData, showTemp, apiSource, isPinned, onTogglePi
         </motion.div>
       </div>
       
-      {children}
+      <div style={{ transform: "translateZ(30px)" }}>
+        {children}
+      </div>
     </motion.section>
   );
 };

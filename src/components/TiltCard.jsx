@@ -8,8 +8,8 @@ const TiltCard = ({ children, className = "" }) => {
   const mouseXSpring = useSpring(x);
   const mouseYSpring = useSpring(y);
 
-  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["10deg", "-10deg"]);
-  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-10deg", "10deg"]);
+  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["15deg", "-15deg"]);
+  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-15deg", "15deg"]);
 
   const handleMouseMove = (e) => {
     const rect = e.currentTarget.getBoundingClientRect();
@@ -39,10 +39,18 @@ const TiltCard = ({ children, className = "" }) => {
         rotateY,
         rotateX,
         transformStyle: "preserve-3d",
+        perspective: "1000px"
       }}
       className={`tilt-wrapper ${className}`}
     >
-      <div style={{ transform: "translateZ(50px)", transformStyle: "preserve-3d" }}>
+      <div 
+        className="tilt-inner"
+        style={{ 
+          transform: "translateZ(60px)", 
+          transformStyle: "preserve-3d",
+          height: "100%"
+        }}
+      >
         {children}
       </div>
     </motion.div>
