@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, MapPin, CloudRain, MapPinIcon } from 'lucide-react';
+import { Search, MapPin, CloudRain, MapPinIcon, Settings as SettingsIcon } from 'lucide-react';
 import { fetchCitySuggestions } from '../services/weatherService';
+import VoiceSearch from './VoiceSearch';
 
-const Header = ({ query, setQuery, handleSearch, handleGeolocation, loading, unit, handleUnitToggle, fetchWeather }) => {
+const Header = ({ query, setQuery, handleSearch, handleGeolocation, loading, unit, handleUnitToggle, fetchWeather, onOpenSettings }) => {
   const [suggestions, setSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const dropdownRef = useRef(null);
@@ -74,6 +75,7 @@ const Header = ({ query, setQuery, handleSearch, handleGeolocation, loading, uni
           <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} type="button" className="icon-btn" onClick={handleGeolocation} disabled={loading} title="Use My Location">
             <MapPin size={20} />
           </motion.button>
+          <VoiceSearch onResult={(res) => { setQuery(res); fetchWeather(res); }} disabled={loading} />
         </form>
 
         <AnimatePresence>
@@ -98,9 +100,20 @@ const Header = ({ query, setQuery, handleSearch, handleGeolocation, loading, uni
         </AnimatePresence>
       </div>
 
-      <div className="unit-toggle">
-        <button className={`unit-btn ${unit === 'c' ? 'active' : ''}`} onClick={() => handleUnitToggle('c')}>°C</button>
-        <button className={`unit-btn ${unit === 'f' ? 'active' : ''}`} onClick={() => handleUnitToggle('f')}>°F</button>
+      <div className="header-right">
+        <div className="unit-toggle">
+          <button className={`unit-btn ${unit === 'c' ? 'active' : ''}`} onClick={() => handleUnitToggle('c')}>°C</button>
+          <button className={`unit-btn ${unit === 'f' ? 'active' : ''}`} onClick={() => handleUnitToggle('f')}>°F</button>
+        </div>
+        
+        <motion.button 
+          whileHover={{ rotate: 90 }} 
+          className="icon-btn settings-btn" 
+          onClick={onOpenSettings}
+          title="Settings"
+        >
+          <SettingsIcon size={20} />
+        </motion.button>
       </div>
     </motion.header>
   );

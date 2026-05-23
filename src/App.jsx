@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import './index.css';
+import html2canvas from 'html2canvas';
 
 // Components
 import Header from './components/Header';
@@ -20,6 +21,7 @@ import FiveDayForecast from './components/FiveDayForecast';
 import WeatherSkeleton from './components/WeatherSkeleton';
 import Toast from './components/Toast';
 import Footer from './components/Footer';
+import Settings from './components/Settings';
 
 // Services
 import { fetchFromOWM, fetchFromWAPI } from './services/weatherService';
@@ -39,6 +41,49 @@ function App() {
     const saved = localStorage.getItem('pinned-cities');
     return saved ? JSON.parse(saved) : [];
   });
+  const [settings, setSettings] = useState(() => {
+    const saved = localStorage.getItem('app-settings');
+    return saved ? JSON.parse(saved) : {
+      tiltEnabled: true,
+      atmosphereEnabled: true,
+      reducedMotion: false
+    };
+  });
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+
+  const updateSetting = (key, value) => {
+    setSettings(prev => {
+      const updated = { ...prev, [key]: value };
+      localStorage.setItem('app-settings', JSON.stringify(updated));
+      return updated;
+    });
+  };
+
+  const handleExport = async () => {
+    const element = document.getElementById('capture-area');
+    if (!element) return;
+    
+    setIsSettingsOpen(false);
+    
+    setTimeout(async () => {
+      try {
+        const canvas = await html2canvas(element, {
+          backgroundColor: '#020617',
+          scale: 2,
+          useCORS: true,
+          logging: false,
+        });
+        
+        const link = document.createElement('a');
+        link.download = `SkyCast-Report-${weatherData.location.name}.png`;
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+      } catch (err) {
+        console.error("Export failed:", err);
+        setError("Failed to generate weather report image.");
+      }
+    }, 300);
+  };
 
   const togglePinCity = (cityName) => {
     setPinnedCities((prev) => {
@@ -171,22 +216,23 @@ function App() {
       transition: { type: 'spring', stiffness: 100, damping: 20 }
     }
   };
-return (
-  <div className="app-container">
-    {/* Background Animated Elements */}
-    <div className="bg-elements">
-      <motion.div className="orb orb-1" animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }} transition={{ repeat: Infinity, duration: 8 }}/>
-      <motion.div className="orb orb-2" animate={{ scale: [1, 1.3, 1], opacity: [0.2, 0.4, 0.2] }} transition={{ repeat: Infinity, duration: 12 }}/>
-    </div>
 
-    {weatherData && (
-      <Atmosphere 
-        condition={weatherData.current.conditionType} 
-        isDay={weatherData.current.isDay} 
-      />
-    )}
+  return (
+    <div className="app-container" id={isSettingsOpen ? "" : "capture-area"}>
+      {/* Background Animated Elements */}
+      <div className="bg-elements">
+        <motion.div className="orb orb-1" animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }} transition={{ repeat: Infinity, duration: 8 }}/>
+        <motion.div className="orb orb-2" animate={{ scale: [1, 1.3, 1], opacity: [0.2, 0.4, 0.2] }} transition={{ repeat: Infinity, duration: 12 }}/>
+      </div>
 
-    <Header 
+      {weatherData && settings.atmosphereEnabled && (
+        <Atmosphere 
+          condition={weatherData.current.conditionType} 
+          isDay={weatherData.current.isDay} 
+        />
+      )}
+
+      <Header 
         query={query}
         setQuery={setQuery}
         handleSearch={handleSearch}
@@ -195,6 +241,7 @@ return (
         unit={unit}
         handleUnitToggle={handleUnitToggle}
         fetchWeather={fetchWeather}
+        onOpenSettings={() => setIsSettingsOpen(true)}
       />
 
       <RecentSearches 
@@ -217,7 +264,7 @@ return (
         ) : weatherData ? (
           <motion.main 
             key="content"
-            variants={containerVariants}
+            variants={settings.reducedMotion ? {} : containerVariants}
             initial="hidden"
             animate="visible"
             className="main-grid"
@@ -228,7 +275,26 @@ return (
               </motion.div>
               
               <motion.div variants={itemVariants}>
-                <TiltCard>
+                {settings.tiltEnabled ? (
+                  <TiltCard>
+                    <CurrentWeather 
+                      weatherData={weatherData} 
+                      showTemp={showTemp} 
+                      apiSource={apiSource} 
+                      isPinned={pinnedCities.some(c => c.toLowerCase() === weatherData.location.name.toLowerCase())}
+                      onTogglePin={togglePinCity}
+                    >
+                      <HourlyForecast 
+                        hourly={weatherData.hourly} 
+                        showTemp={showTemp} 
+                      />
+                      <WeatherInsights current={weatherData.current} />
+                      <ExtendedMetrics current={weatherData.current} />
+                      <SunTrack current={weatherData.current} />
+                      <WeatherChart hourly={weatherData.hourly} unit={unit} />
+                    </CurrentWeather>
+                  </TiltCard>
+                ) : (
                   <CurrentWeather 
                     weatherData={weatherData} 
                     showTemp={showTemp} 
@@ -245,7 +311,7 @@ return (
                     <SunTrack current={weatherData.current} />
                     <WeatherChart hourly={weatherData.hourly} unit={unit} />
                   </CurrentWeather>
-                </TiltCard>
+                )}
               </motion.div>
 
               <motion.div variants={itemVariants}>
@@ -254,16 +320,31 @@ return (
             </div>
 
             <motion.div variants={itemVariants}>
-              <TiltCard>
+              {settings.tiltEnabled ? (
+                <TiltCard>
+                  <FiveDayForecast 
+                    forecast={weatherData.forecast} 
+                    showTemp={showTemp} 
+                  />
+                </TiltCard>
+              ) : (
                 <FiveDayForecast 
                   forecast={weatherData.forecast} 
                   showTemp={showTemp} 
                 />
-              </TiltCard>
+              )}
             </motion.div>
           </motion.main>
         ) : null}
       </AnimatePresence>
+
+      <Settings 
+        isOpen={isSettingsOpen} 
+        onClose={() => setIsSettingsOpen(false)} 
+        settings={settings}
+        updateSetting={updateSetting}
+        onExport={handleExport}
+      />
 
       <Toast message={error} onClose={() => setError(null)} />
       <Footer />
