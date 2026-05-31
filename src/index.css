@@ -460,6 +460,11 @@ body.light-theme .glass-morphism:hover {
   background: linear-gradient(135deg, var(--text-primary) 30%, var(--accent-color) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  transition: filter 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.brand:hover span {
+  filter: drop-shadow(0 0 6px var(--accent-glow));
 }
 
 .brand-icon {
